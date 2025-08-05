@@ -1,0 +1,58 @@
+using System;
+
+class GradeCalculator
+{
+    static void Main()
+    {
+        Console.WriteLine("GRADE CALCULATOR");
+        Console.WriteLine("-----------------");
+        
+        while (true) // Loop for continuous operation
+        {
+            // Get numerical grade input
+            double grade = GetValidGrade();
+            
+            // Calculate and display letter grade
+            string letterGrade = CalculateLetterGrade(grade);
+            Console.WriteLine($"\nLetter Grade: {letterGrade}");
+            
+            // Ask to continue or exit
+            Console.Write("\nCalculate another grade? (Y/N): ");
+            if (Console.ReadLine().Trim().ToUpper() != "Y")
+                break;
+        }
+        
+        Console.WriteLine("\nThank you for using the Grade Calculator!");
+    }
+
+    static double GetValidGrade()
+    {
+        while (true)
+        {
+            Console.Write("\nEnter numerical grade (0-100): ");
+            string input = Console.ReadLine();
+            
+            // Validate input
+            if (double.TryParse(input, out double grade))
+            {
+                if (grade >= 0 && grade <= 100)
+                    return grade;
+            }
+            
+            Console.WriteLine("Invalid input! Please enter a number between 0 and 100.");
+        }
+    }
+
+    static string CalculateLetterGrade(double grade)
+    {
+        // Determine letter grade using switch expression
+        return grade switch
+        {
+            >= 90 => "A",
+            >= 80 => "B",
+            >= 70 => "C",
+            >= 60 => "D",
+            _ => "F"  // Default case (below 60)
+        };
+    }
+}
