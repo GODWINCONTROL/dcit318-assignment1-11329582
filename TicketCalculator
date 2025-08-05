@@ -1,0 +1,66 @@
+using System;
+
+class TicketCalculator
+{
+    static void Main()
+    {
+        const double RegularPrice = 10.00;
+        const double DiscountedPrice = 7.00;
+        
+        Console.WriteLine("MOVIE TICKET PRICE CALCULATOR");
+        Console.WriteLine("-----------------------------");
+        Console.WriteLine("Regular Ticket: GHC 10.00");
+        Console.WriteLine("Discount Ticket (Children 12 & below, Seniors 65+): GHC 7.00\n");
+        
+        while (true)
+        {
+            try
+            {
+                Console.Write("Enter your age: ");
+                string input = Console.ReadLine();
+                
+                // Validate input
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    Console.WriteLine("Error: Age cannot be empty. Please try again.\n");
+                    continue;
+                }
+                
+                if (int.TryParse(input, out int age))
+                {
+                    if (age < 0)
+                    {
+                        Console.WriteLine("Error: Age cannot be negative. Please enter a valid age.\n");
+                        continue;
+                    }
+                    
+                    // Calculate price
+                    double price = (age <= 12 || age >= 65) ? DiscountedPrice : RegularPrice;
+                    string category = (age <= 12) ? "Child" : (age >= 65) ? "Senior" : "Adult";
+                    
+                    // Display result
+                    Console.WriteLine($"\nTicket Price: GHC {price:F2}");
+                    Console.WriteLine($"Category: {category}\n");
+                }
+                else
+                {
+                    Console.WriteLine("Error: Invalid input. Please enter a whole number for age.\n");
+                    continue;
+                }
+                
+                // Continue option
+                Console.Write("Calculate another price? (Y/N): ");
+                if (Console.ReadLine().Trim().ToUpper() != "Y")
+                    break;
+                    
+                Console.WriteLine();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+            }
+        }
+        
+        Console.WriteLine("\nThank you for using the Ticket Price Calculator!");
+    }
+}
