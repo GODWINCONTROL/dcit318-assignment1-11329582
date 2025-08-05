@@ -1,0 +1,85 @@
+using System;
+
+class TriangleIdentifier
+{
+    static void Main()
+    {
+        Console.WriteLine("TRIANGLE TYPE IDENTIFIER");
+        Console.WriteLine("------------------------");
+        Console.WriteLine("Rules:");
+        Console.WriteLine("1. All sides must be positive numbers");
+        Console.WriteLine("2. Must satisfy triangle inequality:");
+        Console.WriteLine("   - Sum of any two sides > third side");
+        
+        while (true)
+        {
+            try
+            {
+                double[] sides = new double[3];
+                string[] sideNames = { "first", "second", "third" };
+                
+                // Get and validate all three sides
+                for (int i = 0; i < 3; i++)
+                {
+                    Console.Write($"\nEnter {sideNames[i]} side length: ");
+                    while (!double.TryParse(Console.ReadLine(), out sides[i]) || sides[i] <= 0)
+                    {
+                        Console.WriteLine("Invalid input! Must be a positive number.");
+                        Console.Write($"Enter {sideNames[i]} side length again: ");
+                    }
+                }
+                
+                // Check triangle validity
+                if (!IsValidTriangle(sides[0], sides[1], sides[2]))
+                {
+                    Console.WriteLine("\nERROR: These sides don't form a valid triangle!");
+                    Console.WriteLine("Triangle inequality violated: sum of any two sides must be greater than the third side.");
+                    Console.WriteLine($"Your inputs: {sides[0]} + {sides[1]} = {sides[0] + sides[1]} | Compare to: {sides[2]}");
+                    Console.WriteLine($"          {sides[0]} + {sides[2]} = {sides[0] + sides[2]} | Compare to: {sides[1]}");
+                    Console.WriteLine($"          {sides[1]} + {sides[2]} = {sides[1] + sides[2]} | Compare to: {sides[0]}");
+                }
+                else
+                {
+                    // Determine and display triangle type
+                    string triangleType = GetTriangleType(sides[0], sides[1], sides[2]);
+                    Console.WriteLine($"\nResult: This is a {triangleType} triangle");
+                }
+                
+                // Continue option
+                Console.Write("\nCheck another triangle? (Y/N): ");
+                if (Console.ReadLine().Trim().ToUpper() != "Y")
+                    break;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+            }
+        }
+        
+        Console.WriteLine("\nThank you for using the Triangle Identifier!");
+    }
+
+    static bool IsValidTriangle(double a, double b, double c)
+    {
+        // Triangle inequality theorem validation
+        return a + b > c && 
+               a + c > b && 
+               b + c > a;
+    }
+
+    static string GetTriangleType(double a, double b, double c)
+    {
+        // Count equal sides using XOR comparisons
+        bool abEqual = Math.Abs(a - b) < 0.0001;
+        bool acEqual = Math.Abs(a - c) < 0.0001;
+        bool bcEqual = Math.Abs(b - c) < 0.0001;
+
+        // Determine triangle type
+        if (abEqual && acEqual && bcEqual)
+            return "Equilateral (all sides equal)";
+        else if (abEqual || acEqual || bcEqual)
+            return "Isosceles (two sides equal)";
+        else
+            return "Scalene (no sides equal)";
+    }
+}
